@@ -21,7 +21,7 @@ class RecipeDetailScreen extends StatefulWidget {
 
 class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   SearchMealMODAL.Meals? searchMealModel;
-  List<String> likedRecipe = [];
+  List<SearchMealMODAL.Meals> likedRecipe = [];
 
   bool isLiked = false;
   SharedPreferences? prefs;
@@ -44,13 +44,29 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         searchMealModel = SearchMealMODAL.Meals.fromJson(
           jsonDecode(widget.data!['data']),
         );
-        if (prefs!.getStringList('isLiked') != null) {
-          likedRecipe = prefs!.getStringList('isLiked')!;
-          if (likedRecipe.contains(searchMealModel!.idMeal)) {
+        if (prefs!.getString('isLiked') != null) {
+          List<dynamic> decodedList = jsonDecode(prefs!.getString('isLiked')!);
+
+          likedRecipe = decodedList.map((item) {
+            return SearchMealMODAL.Meals.fromJson(item);
+          }).toList();
+          bool isAlreadyLiked = false;
+          for (SearchMealMODAL.Meals meal in likedRecipe) {
+            if (meal.idMeal == searchMealModel!.idMeal) {
+              isAlreadyLiked = true;
+              break;
+            }
+          }
+          if (isAlreadyLiked) {
             isLiked = true;
           } else {
             isLiked = false;
           }
+          // if (likedRecipe.contains(searchMealModel!)) {
+          //   isLiked = true;
+          // } else {
+          //   isLiked = false;
+          // }
         }
       });
     }
@@ -64,27 +80,61 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   // }
   //
   Future<void> toggleLikedStatus() async {
-    setState(() {
-      if (prefs!.getStringList('isLiked') != null) {
-        likedRecipe = prefs!.getStringList('isLiked')!;
-        if (likedRecipe.contains(searchMealModel!.idMeal)) {
-          isLiked = false;
-          likedRecipe.remove(searchMealModel!.idMeal!);
+    print(
+        'Before toggleLikedStatus: isLiked=$isLiked, likedRecipe=$likedRecipe');
 
-          prefs!.setStringList("isLiked", likedRecipe);
+    setState(() {
+      if (prefs!.getString('isLiked') != null) {
+        List<dynamic> decodedList = jsonDecode(prefs!.getString('isLiked')!);
+        likedRecipe = decodedList.map((item) {
+          return SearchMealMODAL.Meals.fromJson(item);
+        }).toList();
+
+        bool isAlreadyLiked = false;
+
+        for (SearchMealMODAL.Meals meal in likedRecipe) {
+          if (meal.idMeal == searchMealModel!.idMeal) {
+            isAlreadyLiked = true;
+            break;
+          }
+        }
+        if (isAlreadyLiked) {
+          isLiked = false;
+          likedRecipe.remove(searchMealModel!);
+          prefs!.setString("isLiked", jsonEncode(likedRecipe));
         } else {
           isLiked = true;
-          likedRecipe.add(searchMealModel!.idMeal!);
-          prefs!.setStringList("isLiked", likedRecipe);
+          likedRecipe.add(searchMealModel!);
+          prefs!.setString("isLiked", jsonEncode(likedRecipe));
         }
-      } else {
-        likedRecipe.add(searchMealModel!.idMeal!);
+
+        //   if (likedRecipe.contains(searchMealModel!)) {
+        //     isLiked = false;
+        //     likedRecipe.remove(searchMealModel!.idMeal!);
+        //
+        //     prefs!.setString("isLiked", jsonEncode(likedRecipe));
+        //     // prefs!.setString("isLiked", likedRecipe);
+        //   }
+        //
+        //   else {
+        //     isLiked = true;
+        //     likedRecipe.add(searchMealModel!);
+        //     prefs!.setString("isLiked", jsonEncode(likedRecipe));
+        //   }
+        // } else {
+        //   likedRecipe.add(searchMealModel!);
+        //   isLiked = true;
+        //   prefs!.setString("isLiked", jsonEncode(likedRecipe));
+        // }
+      }else {
+        likedRecipe.add(searchMealModel!);
         isLiked = true;
-        prefs!.setStringList("isLiked", likedRecipe);
+        prefs!.setString("isLiked", jsonEncode(likedRecipe));
       }
     });
+    print(
+        'After toggleLikedStatus: isLiked=$isLiked, likedRecipe=$likedRecipe');
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
