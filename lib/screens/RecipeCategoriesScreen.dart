@@ -67,7 +67,7 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text(
-            'Recipes',
+            'Recipes Categories',
             style: TextStyle(fontSize: 20.sp),
           ),
         ),

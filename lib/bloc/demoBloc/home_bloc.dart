@@ -5,7 +5,7 @@ import 'package:recipe/data/cart_item.dart';
 import 'package:recipe/data/grocery.dart';
 import 'package:recipe/data/wishlist_item.dart';
 
-import '../data/model/home_product_model.dart';
+import '../../data/model/home_product_model.dart';
 
 // part 'home_event.dart';
 
