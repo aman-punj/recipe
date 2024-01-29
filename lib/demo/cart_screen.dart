@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/cart_bloc.dart';
 import '../features/cart_tile.dart';
 import '../tile_features/cart_tile.dart';
-import 'productstile_screen.dart';
+import '../screens/productstile_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});

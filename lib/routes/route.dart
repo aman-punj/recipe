@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe/bloc/recipe_bloc.dart';
 import 'package:recipe/bloc/search_mealBloc.dart';
-import 'package:recipe/screens/homepage_screen.dart';
+import 'package:recipe/demo/homepage_screen.dart';
 import 'package:recipe/screens/likedRecipe_screen.dart';
 import 'package:recipe/screens/recipe_detail_screen.dart';
 import 'package:recipe/screens/search_detail.dart';
-import 'package:recipe/screens/wishlist_screen.dart';
+import 'package:recipe/demo/wishlist_screen.dart';
 import 'package:recipe/utils/common_widget.dart';
-import '../screens/cart_screen.dart';
+import '../demo/cart_screen.dart';
 import '../screens/recipe_Screen.dart';
 import '../screens/splash_screen.dart';
 
@@ -20,17 +20,17 @@ dynamic? sendRoute(BuildContext context, RoutesNames s,
   dynamic widget = null;
   switch (s) {
     case RoutesNames.splash:
-      widget = SplashScreen();
+      widget = const SplashScreen();
       break;
 
     case RoutesNames.homescreen:
-      sendActivity(context, HomePage(), clearstack: clearstack);
+      sendActivity(context, const HomePage(), clearstack: clearstack);
       break;
     case RoutesNames.cart:
-      sendActivity(context, CartScreen());
+      sendActivity(context, const CartScreen());
       break;
     case RoutesNames.wishlist:
-      sendActivity(context, WishlistScreen());
+      sendActivity(context, const WishlistScreen());
       break;
 
     case RoutesNames.recipedetail:
@@ -52,7 +52,7 @@ dynamic? sendRoute(BuildContext context, RoutesNames s,
                     SearchMealBloc(repository: SearchMealRepositoryImpl()),
               ),
             ],
-            child:  const RecipeHomeScreen(),
+            child: const RecipeHomeScreen(),
           ));
       break;
 
@@ -61,7 +61,7 @@ dynamic? sendRoute(BuildContext context, RoutesNames s,
       break;
 
     case RoutesNames.likedrecipe:
-      sendActivity(context, LikedRecipeScreen());
+      sendActivity(context, const LikedRecipeScreen());
   }
   return widget;
 }
@@ -73,5 +73,6 @@ enum RoutesNames {
   wishlist,
   recipescreen,
   recipedetail,
-  searchMealdetail, likedrecipe
+  searchMealdetail,
+  likedrecipe
 }

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recipe/data/model/recipeModel.dart' as RecipeMODEL;
 
-
 class SearchDetailScreen extends StatefulWidget {
   final Map<String, dynamic>? data;
 
@@ -44,75 +43,49 @@ class _SearchDetailScreenState extends State<SearchDetailScreen> {
           padding: const EdgeInsets.all(16.0),
           child: recipeModel != null
               ? Card(
-            elevation: 4.0,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.network(
-                  recipeModel!.strCategoryThumb!,
-                  width: 0.8.sw,
-                  height: 0.3.sh,
-                  fit: BoxFit.cover,
-                ),
-                const SizedBox(height: 16.0),
-                Text(
-                  recipeModel!.strCategory!,
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
+                  elevation: 4.0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.network(
+                        recipeModel!.strCategoryThumb!,
+                        width: 0.8.sw,
+                        height: 0.3.sh,
+                        fit: BoxFit.cover,
+                      ),
+                      const SizedBox(height: 16.0),
+                      Text(
+                        recipeModel!.strCategory!,
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        recipeModel!.strCategoryDescription!,
+                        style: TextStyle(fontSize: 18.sp),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                )
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 16.0),
+                      Text(
+                        'Loading Recipe...',
+                        style: TextStyle(fontSize: 16.sp),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 8.0),
-                Text(
-                  recipeModel!.strCategoryDescription!,
-                  style: TextStyle(fontSize: 18.sp),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          )
-              : Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(),
-                const SizedBox(height: 16.0),
-                Text(
-                  'Loading Recipe...',
-                  style: TextStyle(fontSize: 16.sp),
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );
-    //   Scaffold(
-    //   body: SingleChildScrollView(
-    //     child: recipeModel != null
-    //         ? Column(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       children: [
-    //         Image.network(
-    //           recipeModel!.strCategoryThumb!,
-    //           width: 0.8.sw,
-    //           height: 0.3.sh,
-    //         ),
-    //         Text(
-    //           recipeModel!.strCategory!,
-    //           style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
-    //         ),
-    //         Text(
-    //           recipeModel!.strCategoryDescription!,
-    //           style: TextStyle(fontSize: 18.sp),
-    //         ),
-    //       ],
-    //     )
-    //         : Center(
-    //       child: CircularProgressIndicator(),
-    //     ),
-    //   ),
-    // );
   }
 }

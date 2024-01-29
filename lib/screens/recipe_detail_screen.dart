@@ -151,7 +151,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
           IconButton(
               onPressed: () {
                 sendRoute(context, RoutesNames.likedrecipe);
+              // Navigator.of(context).pushReplacement()
               },
+
               icon: Icon(Icons.tab_sharp)),
         ],
       ),

@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recipe/routes/route.dart';
 import 'package:recipe/screens/splash_screen.dart';
 
-import 'screens/homepage_screen.dart';
+import 'demo/homepage_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
