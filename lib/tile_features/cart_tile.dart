@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:recipe/features/home/home_bloc.dart';
+import 'package:recipe/bloc/home_bloc.dart';
 
-import '../../data/model/home_product_model.dart';
-import 'wishlist_bloc.dart';
+import '../data/model/home_product_model.dart';
+import '../bloc/cart_bloc.dart';
 
-class WishlistTile extends StatelessWidget {
+class CartTile extends StatelessWidget {
   final ProductModel productModel;
-  final WishlistBloc wishlistBloc;
+  final CartBloc cartBloc;
 
-  const WishlistTile(
-      {super.key, required this.productModel, required this.wishlistBloc});
+  const CartTile(
+      {super.key, required this.productModel, required this.cartBloc});
 
   // bool isfav = false;
   @override
@@ -30,7 +30,7 @@ class WishlistTile extends StatelessWidget {
           child: Row(
             children: [
               Flexible(child: Image.network(productModel.imageUrl)),
-              const Spacer(),
+              Spacer(),
               Flexible(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -41,13 +41,32 @@ class WishlistTile extends StatelessWidget {
                     Row(
                       children: [
                         IconButton(
-                            onPressed: () {}, icon: const Icon(Icons.favorite)),
+                            onPressed: () {
+                              // cartBloc.add(
+                              //     HomeProductWishlistBtnClickedEvent(
+                              //         clickedProduct: productModel));
+                              // setState(() {
+                              //   isfav = !isfav;
+                              //   // ScaffoldMessenger.of(context).showSnackBar(
+                              //   //     SnackBar(
+                              //   //         duration: Duration(seconds: 1),
+                              //   //         content: isfav
+                              //   //             ? Text('item added')
+                              //   //             : Text('item removed')));
+                              // }
+                              // );
+                            },
+                            icon: Icon(
+                                // isfav
+                                // ? Icons.favorite
+                                // :
+                            Icons.favorite_border)),
                         IconButton(
                           onPressed: () {
-                            // wishlistBloc.add(HomeProductWishlistBtnClickedEvent(
+                            // cartBloc.add(HomeProductCartBtnClickedEvent(
                             //     clickedProduct: productModel));
                           },
-                          icon: const Icon(Icons.add_shopping_cart),
+                          icon: Icon(Icons.add_shopping_cart),
                         )
                       ],
                     ),

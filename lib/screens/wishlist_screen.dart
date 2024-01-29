@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../features/wishlist/wishlist_bloc.dart';
-import '../features/wishlist/wishlist_tile.dart';
+import '../bloc/wishlist_bloc.dart';
+import '../tile_features/wishlist_tile.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -47,12 +47,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
             default:
             // Handle other cases or return a placeholder
               return const Center(
-                child: Text('Error') ,
-              );
+                child: Text('Error'),
+           );
           }
         },
       ),
     );
   }
-
 }

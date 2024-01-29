@@ -32,7 +32,6 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
     super.initState();
     recipeBloc = BlocProvider.of<RecipeBloc>(context);
     searchMealBloc = BlocProvider.of<SearchMealBloc>(context);
-
     // calling bloc events
     recipeBloc!.add(FetchRecipeEvent(data: {}));
   }

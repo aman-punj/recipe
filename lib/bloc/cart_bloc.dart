@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 
-import '../../data/cart_item.dart';
-import '../../data/model/home_product_model.dart';
+import '../data/cart_item.dart';
+import '../data/model/home_product_model.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(CartInitial()) {
@@ -14,10 +14,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   FutureOr<void> cartInitialEvent(CartInitialEvent event, Emitter<CartState> emit) {
     emit(CartSuccessState(cartItem: cartItem));
   }
-
-
   FutureOr<void> cartItemremovesEvent(CartItemremovesEvent event, Emitter<CartState> emit) {
-
   }
 }
 

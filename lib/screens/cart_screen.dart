@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../features/cart/cart_bloc.dart';
-import '../features/cart/cart_tile.dart';
+import '../bloc/cart_bloc.dart';
+import '../features/cart_tile.dart';
+import '../tile_features/cart_tile.dart';
 import 'productstile_screen.dart';
 
 class CartScreen extends StatefulWidget {

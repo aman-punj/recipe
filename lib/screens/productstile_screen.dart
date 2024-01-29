@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:recipe/features/home/home_bloc.dart';
+import 'package:recipe/bloc/home_bloc.dart';
 
 import '../data/model/home_product_model.dart';
 
@@ -17,7 +17,7 @@ class ProductTile extends StatefulWidget {
 
 class _ProductTileState extends State<ProductTile> {
   bool isfav = false;
-  bool isadded = false;
+  // bool isadded = false;
 
   @override
   Widget build(BuildContext context) {

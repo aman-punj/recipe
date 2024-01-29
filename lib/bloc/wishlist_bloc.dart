@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:recipe/data/wishlist_item.dart';
 
-import '../../data/model/home_product_model.dart';
+import '../data/model/home_product_model.dart';
 
 
 class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {

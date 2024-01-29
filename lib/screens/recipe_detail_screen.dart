@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recipe/data/model/SearchNameModel.dart' as SearchMealMODAL;
+import 'package:recipe/routes/route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:recipe/data/model/recipeModel.dart' as RecipeMODEL;
 
@@ -20,35 +21,67 @@ class RecipeDetailScreen extends StatefulWidget {
 
 class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   SearchMealMODAL.Meals? searchMealModel;
+  List<String> likedRecipe = [];
+
+  bool isLiked = false;
+  SharedPreferences? prefs;
 
   @override
   void initState() {
     super.initState();
+
+    initview();
+    // checkLikedStatus();
+  }
+
+  void initview() async {
+    prefs = await SharedPreferences.getInstance();
+
     // Decode the data in initState to avoid decoding multiple times
+
     if (widget.data != null) {
       setState(() {
         searchMealModel = SearchMealMODAL.Meals.fromJson(
           jsonDecode(widget.data!['data']),
         );
+        if (prefs!.getStringList('isLiked') != null) {
+          likedRecipe = prefs!.getStringList('isLiked')!;
+          if (likedRecipe.contains(searchMealModel!.idMeal)) {
+            isLiked = true;
+          } else {
+            isLiked = false;
+          }
+        }
       });
     }
-    checkLikedStatus();
   }
 
-  bool isLiked = false;
-
-  Future<void> checkLikedStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      isLiked = prefs.getBool(widget.data!['idMeal']) ?? false;
-    });
-  }
-
+  // Future<void> checkLikedStatus() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     isLiked = prefs.getBool(widget.data!['idMeal']) ?? false;
+  //   });
+  // }
+  //
   Future<void> toggleLikedStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      isLiked = !isLiked;
-      prefs.setBool(widget.data!['idMeal'], isLiked);
+      if (prefs!.getStringList('isLiked') != null) {
+        likedRecipe = prefs!.getStringList('isLiked')!;
+        if (likedRecipe.contains(searchMealModel!.idMeal)) {
+          isLiked = false;
+          likedRecipe.remove(searchMealModel!.idMeal!);
+
+          prefs!.setStringList("isLiked", likedRecipe);
+        } else {
+          isLiked = true;
+          likedRecipe.add(searchMealModel!.idMeal!);
+          prefs!.setStringList("isLiked", likedRecipe);
+        }
+      } else {
+        likedRecipe.add(searchMealModel!.idMeal!);
+        isLiked = true;
+        prefs!.setStringList("isLiked", likedRecipe);
+      }
     });
   }
 
@@ -63,7 +96,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               onPressed: () {
                 toggleLikedStatus();
               },
-              icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border))
+              icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border)),
+          IconButton(
+              onPressed: () {
+                sendRoute(context, RoutesNames.likedrecipe);
+              },
+              icon: Icon(Icons.tab_sharp)),
         ],
       ),
       body: SingleChildScrollView(
@@ -115,31 +153,5 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         ),
       ),
     );
-    //   Scaffold(
-    //   body: SingleChildScrollView(
-    //     child: recipeModel != null
-    //         ? Column(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       children: [
-    //         Image.network(
-    //           recipeModel!.strCategoryThumb!,
-    //           width: 0.8.sw,
-    //           height: 0.3.sh,
-    //         ),
-    //         Text(
-    //           recipeModel!.strCategory!,
-    //           style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
-    //         ),
-    //         Text(
-    //           recipeModel!.strCategoryDescription!,
-    //           style: TextStyle(fontSize: 18.sp),
-    //         ),
-    //       ],
-    //     )
-    //         : Center(
-    //       child: CircularProgressIndicator(),
-    //     ),
-    //   ),
-    // );
   }
 }

@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-
 import '../data/api_services/api_service.dart';
 import '../data/model/SearchNameModel.dart';
 import '../utils/strings.dart';
@@ -16,7 +15,8 @@ class SearchMealBloc extends Bloc<SearchMealEvent, SearchMealState> {
     on<FetchSearchMealEvent>((event, emit) async {
       emit(SearchMealInitialState());
       try {
-        SearchMealModel searchMealModel = await repository.sendOtpDealer(event.data);
+        SearchMealModel searchMealModel =
+            await repository.sendOtpDealer(event.data);
         if (searchMealModel.meals != null) {
           if (searchMealModel.meals!.isNotEmpty) {
             emit(SearchMealLoadedState(searchMealModel: searchMealModel));
@@ -44,6 +44,10 @@ class FetchSearchMealEvent extends SearchMealEvent {
   List<Object?> get props => throw UnimplementedError();
 }
 
+// class SearchLikedBtnClickedEvent extends SearchMealEvent {
+//   final SearchMealModel clickedProduct;
+//   HomeProductWishlistBtnClickedEvent({required this.clickedProduct});
+// }
 abstract class SearchMealState extends Equatable {
   const SearchMealState();
 }
@@ -84,7 +88,7 @@ class SearchMealRepositoryImpl extends SearchMealRepository {
   @override
   Future<SearchMealModel> sendOtpDealer(Map<String, dynamic>? data) async {
     final Response response =
-    await ApiService().get(AppConstants.meals , queryParameters: data);
+        await ApiService().get(AppConstants.meals, queryParameters: data);
     if (response.statusCode == 200) {
       var data = json.decode('$response');
       SearchMealModel model = SearchMealModel.fromJson(data);

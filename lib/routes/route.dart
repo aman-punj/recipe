@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe/bloc/recipe_bloc.dart';
 import 'package:recipe/bloc/search_mealBloc.dart';
 import 'package:recipe/screens/homepage_screen.dart';
+import 'package:recipe/screens/likedRecipe_screen.dart';
 import 'package:recipe/screens/recipe_detail_screen.dart';
 import 'package:recipe/screens/search_detail.dart';
 import 'package:recipe/screens/wishlist_screen.dart';
@@ -57,6 +58,10 @@ dynamic? sendRoute(BuildContext context, RoutesNames s,
 
     case RoutesNames.searchMealdetail:
       sendActivity(context, SearchDetailScreen(data: data));
+      break;
+
+    case RoutesNames.likedrecipe:
+      sendActivity(context, LikedRecipeScreen());
   }
   return widget;
 }
@@ -68,5 +73,5 @@ enum RoutesNames {
   wishlist,
   recipescreen,
   recipedetail,
-  searchMealdetail
+  searchMealdetail, likedrecipe
 }

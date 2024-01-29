@@ -6,7 +6,7 @@ import 'package:recipe/screens/productstile_screen.dart';
 import 'package:recipe/utils/strings.dart';
 
 import '../data/cart_item.dart';
-import '../features/home/home_bloc.dart';
+import '../bloc/home_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -84,7 +84,6 @@ class _HomePageState extends State<HomePage> {
                     },
                     icon: const Icon(Icons.favorite),
                   ),
-
                   Stack(
                     children: [
                       IconButton(
@@ -113,8 +112,6 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   SizedBox(width: 10.sp,)
-
-
                 ],
               ),
               body: ListView.builder(
