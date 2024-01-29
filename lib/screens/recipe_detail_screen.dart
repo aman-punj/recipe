@@ -126,7 +126,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         //   isLiked = true;
         //   prefs!.setString("isLiked", jsonEncode(likedRecipe));
         // }
-      }else {
+      } else {
         likedRecipe.add(searchMealModel!);
         isLiked = true;
         prefs!.setString("isLiked", jsonEncode(likedRecipe));
@@ -135,6 +135,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     print(
         'After toggleLikedStatus: isLiked=$isLiked, likedRecipe=$likedRecipe');
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
