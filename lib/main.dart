@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recipe/routes/route.dart';
-import 'package:recipe/screens/splash_screen.dart';
+import 'package:recipe/screens/SplashScreen.dart';
 
 import 'demo/homepage_screen.dart';
 

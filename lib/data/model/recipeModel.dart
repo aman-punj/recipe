@@ -1,13 +1,13 @@
 import 'dart:convert';
-RecipeModel recipeModelFromJson(String str) => RecipeModel.fromJson(json.decode(str));
-String recipeModelToJson(RecipeModel data) => json.encode(data.toJson());
-class RecipeModel {
-  RecipeModel({
+CategoryModel categoryModelFromJson(String str) => CategoryModel.fromJson(json.decode(str));
+String categoryModelToJson(CategoryModel data) => json.encode(data.toJson());
+class CategoryModel {
+  CategoryModel({
       List<Categories>? categories,}){
     _categories = categories;
 }
 
-  RecipeModel.fromJson(dynamic json) {
+  CategoryModel.fromJson(dynamic json) {
     if (json['categories'] != null) {
       _categories = [];
       json['categories'].forEach((v) {

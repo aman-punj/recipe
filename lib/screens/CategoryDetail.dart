@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recipe/data/model/recipeModel.dart' as RecipeMODEL;
 
-class SearchDetailScreen extends StatefulWidget {
+class CategoryDetailScreen extends StatefulWidget {
   final Map<String, dynamic>? data;
 
-  SearchDetailScreen({
+  CategoryDetailScreen({
     Key? key,
     required this.data,
   }) : super(key: key);
 
   @override
-  State<SearchDetailScreen> createState() => _SearchDetailScreenState();
+  State<CategoryDetailScreen> createState() => _CategoryDetailScreenState();
 }
 
-class _SearchDetailScreenState extends State<SearchDetailScreen> {
+class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   RecipeMODEL.Categories? recipeModel;
 
   @override

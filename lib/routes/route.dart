@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipe/bloc/recipe_bloc.dart';
-import 'package:recipe/bloc/search_mealBloc.dart';
+import 'package:recipe/bloc/CategoryBloc.dart';
+import 'package:recipe/bloc/SearchMealBloc.dart';
 import 'package:recipe/demo/homepage_screen.dart';
-import 'package:recipe/screens/likedRecipe_screen.dart';
-import 'package:recipe/screens/recipe_detail_screen.dart';
-import 'package:recipe/screens/search_detail.dart';
+import 'package:recipe/screens/LikedRecipesScreen.dart';
+import 'package:recipe/screens/RecipieDetailScreen.dart';
+import 'package:recipe/screens/CategoryDetail.dart';
 import 'package:recipe/demo/wishlist_screen.dart';
 import 'package:recipe/utils/common_widget.dart';
 import '../demo/cart_screen.dart';
 import '../screens/RecipeCategoriesScreen.dart';
-import '../screens/splash_screen.dart';
+import '../screens/SplashScreen.dart';
 
 dynamic? sendRoute(BuildContext context, RoutesNames s,
     {bool isreplace = false,
@@ -42,9 +42,9 @@ dynamic? sendRoute(BuildContext context, RoutesNames s,
           context,
           MultiBlocProvider(
             providers: [
-              BlocProvider<RecipeBloc>(
-                create: (context) => RecipeBloc(
-                  repository: RecipeRepositoryImpl(),
+              BlocProvider<CategoryBloc>(
+                create: (context) => CategoryBloc(
+                  repository: CategoryRepositoryImpl(),
                 ),
               ),
               BlocProvider<SearchMealBloc>(
@@ -58,7 +58,7 @@ dynamic? sendRoute(BuildContext context, RoutesNames s,
       break;
 
     case RoutesNames.searchMealdetail:
-      sendActivity(context, SearchDetailScreen(data: data));
+      sendActivity(context, CategoryDetailScreen(data: data));
       break;
 
     case RoutesNames.likedrecipe:

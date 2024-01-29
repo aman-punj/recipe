@@ -6,7 +6,7 @@ import 'package:recipe/routes/route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/model/SearchNameModel.dart' as SearchMealMODAL;
-import 'recipe_detail_screen.dart';
+import 'RecipieDetailScreen.dart';
 
 class LikedRecipeScreen extends StatefulWidget {
   const LikedRecipeScreen({super.key});

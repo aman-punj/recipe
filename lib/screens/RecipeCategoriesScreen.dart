@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:recipe/data/model/recipeModel.dart';
 import 'package:recipe/routes/route.dart';
 import 'package:recipe/utils/common_widget.dart';
 
-import '../bloc/recipe_bloc.dart';
-import '../bloc/search_mealBloc.dart';
+import '../bloc/CategoryBloc.dart';
+import '../bloc/SearchMealBloc.dart';
 import '../data/model/SearchNameModel.dart';
+import '../data/model/recipeModel.dart';
 
 class RecipeHomeScreen extends StatefulWidget {
   const RecipeHomeScreen({super.key});
@@ -20,8 +20,8 @@ class RecipeHomeScreen extends StatefulWidget {
 }
 
 class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
-  RecipeBloc? recipeBloc;
-  RecipeModel? recipeModel;
+  CategoryBloc? categoryBloc;
+  CategoryModel? categoryModel;
 
   SearchMealBloc? searchMealBloc;
   SearchMealModel? searchMealModel;
@@ -32,10 +32,10 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
   @override
   void initState() {
     super.initState();
-    recipeBloc = BlocProvider.of<RecipeBloc>(context);
+    categoryBloc = BlocProvider.of<CategoryBloc>(context);
     searchMealBloc = BlocProvider.of<SearchMealBloc>(context);
     // calling bloc events
-    recipeBloc!.add(FetchRecipeEvent(data: {}));
+    categoryBloc!.add(FetchCategoryEvent(data: {}));
   }
 
   void _showBackDialog() {
@@ -77,13 +77,13 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<RecipeBloc, RecipeState>(
+        BlocListener<CategoryBloc, CategoryState>(
           listener: (context, state) {
-            if (state is RecipeLoadingState) {
+            if (state is CategoryLoadingState) {
               toast('loading');
-            } else if (state is RecipeLoadedState) {
+            } else if (state is CategoryLoadedState) {
               setState(() {
-                recipeModel = state.recipeModel;
+                categoryModel = state.categoryModel;
               });
             }
           },
@@ -118,22 +118,29 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
       // ),
       child: PopScope(
         canPop: false,
-        onPopInvoked: ( value) {
-          showDialog(context: context, builder: (BuildContext contaxt){
-            return AlertDialog(
-              title: Text('Exit?'),
-              content: Text("Do you want to exit app?"),
-              actions: [
-                ElevatedButton(onPressed: () async{
-                  onbackpress(context, isdialog: true);
-                  await SystemChannels.platform.invokeListMethod<void>('SystemNavigator.pop');
-                }, child: Text('Yes')),
-                ElevatedButton(onPressed: (){
-                  Navigator.pop(context);
-                }, child: Text('No')),
-              ],
-            );
-          });
+        onPopInvoked: (value) {
+          showDialog(
+              context: context,
+              builder: (BuildContext contaxt) {
+                return AlertDialog(
+                  title: Text('Exit?'),
+                  content: Text("Do you want to exit app?"),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () async {
+                          onbackpress(context, isdialog: true);
+                          await SystemChannels.platform
+                              .invokeListMethod<void>('SystemNavigator.pop');
+                        },
+                        child: Text('Yes')),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('No')),
+                  ],
+                );
+              });
         },
         child: Scaffold(
           appBar: AppBar(
@@ -143,9 +150,11 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
               style: TextStyle(fontSize: 20.sp),
             ),
             actions: [
-              IconButton(onPressed: (){
-                sendRoute(context, RoutesNames.likedrecipe);
-              }, icon: Icon(Icons.favorite_outlined))
+              IconButton(
+                  onPressed: () {
+                    sendRoute(context, RoutesNames.likedrecipe);
+                  },
+                  icon: Icon(Icons.favorite_outlined))
             ],
           ),
           body: Padding(
@@ -217,19 +226,19 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
                       },
                     ),
                   )
-                else if (recipeModel != null)
+                else if (categoryModel != null)
                   Expanded(
                     child: ListView.builder(
-                      itemCount: recipeModel!.categories!.length,
+                      itemCount: categoryModel!.categories!.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
                             sendRoute(
                               context,
-                              RoutesNames.recipedetail,
+                              RoutesNames.searchMealdetail,
                               data: {
                                 "data": jsonEncode(
-                                  recipeModel!.categories![index],
+                                  categoryModel!.categories![index],
                                 ),
                               },
                             );
@@ -238,13 +247,13 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
                             child: Row(
                               children: [
                                 Image.network(
-                                  recipeModel!
+                                  categoryModel!
                                       .categories![index].strCategoryThumb!,
                                   height: 30.h,
                                 ),
                                 SizedBox(width: 10.w),
                                 Text(
-                                  recipeModel!.categories![index].strCategory!,
+                                  categoryModel!.categories![index].strCategory!,
                                   style: TextStyle(fontSize: 20.sp),
                                 ),
                               ],
@@ -319,10 +328,10 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
       //                         );
       //                       }),
       //                 )
-      //               : recipeModel != null
+      //               : categoryModel != null
       //                   ? Expanded(
       //                       child: ListView.builder(
-      //                           itemCount: recipeModel!.categories!.length,
+      //                           itemCount: categoryModel!.categories!.length,
       //                           itemBuilder: (context, index) {
       //                             return GestureDetector(
       //                               onTap: () {
@@ -332,19 +341,19 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
       //                                     // this is build inside sendRoute to take a Map<String, dynamic>? data
       //                                     data: {
       //                                       "data": jsonEncode(
-      //                                           recipeModel!.categories![index])
+      //                                           categoryModel!.categories![index])
       //                                     });
       //                               },
       //                               child: Card(
       //                                 child: Row(
       //                                   children: [
       //                                     Image.network(
-      //                                       recipeModel!.categories![index]
+      //                                       categoryModel!.categories![index]
       //                                           .strCategoryThumb!,
       //                                       height: 30.h,
       //                                     ),
       //                                     Text(
-      //                                       recipeModel!.categories![index]
+      //                                       categoryModel!.categories![index]
       //                                           .strCategory!,
       //                                       style: TextStyle(fontSize: 20.sp),
       //                                     )
