@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recipe/data/model/recipeModel.dart';
@@ -24,6 +25,7 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
 
   SearchMealBloc? searchMealBloc;
   SearchMealModel? searchMealModel;
+  bool onAppClose = false;
 
   TextEditingController searchController = TextEditingController();
 
@@ -34,6 +36,41 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
     searchMealBloc = BlocProvider.of<SearchMealBloc>(context);
     // calling bloc events
     recipeBloc!.add(FetchRecipeEvent(data: {}));
+  }
+
+  void _showBackDialog() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Are you sure?'),
+          content: const Text(
+            'Are you sure you want to leave this App?',
+          ),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Nevermind'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Leave'),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -63,115 +100,164 @@ class _RecipeHomeScreenState extends State<RecipeHomeScreen> {
           },
         ),
       ],
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(
-            'Recipes Categories',
-            style: TextStyle(fontSize: 20.sp),
+
+      // PopScope(
+      //   canPop: false,
+      //   onPopInvoked: (bool didPop) {
+      //     if (didPop) {
+      //       return;
+      //     }
+      //     _showBackDialog();
+      //   },
+      //   child: TextButton(
+      //     onPressed: () {
+      //       _showBackDialog();
+      //     },
+      //     child: const Text('Go back'),
+      //   ),
+      // ),
+      child: PopScope(
+        canPop: false,
+        onPopInvoked: ( value) {
+          showDialog(context: context, builder: (BuildContext contaxt){
+            return AlertDialog(
+              title: Text('Exit?'),
+              content: Text("Do you want to exit app?"),
+              actions: [
+                ElevatedButton(onPressed: () async{
+                  onbackpress(context, isdialog: true);
+                  await SystemChannels.platform.invokeListMethod<void>('SystemNavigator.pop');
+                }, child: Text('Yes')),
+                ElevatedButton(onPressed: (){
+                  Navigator.pop(context);
+                }, child: Text('No')),
+              ],
+            );
+          });
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text(
+              'Recipes Categories',
+              style: TextStyle(fontSize: 20.sp),
+            ),
+            actions: [
+              IconButton(onPressed: (){
+                sendRoute(context, RoutesNames.likedrecipe);
+              }, icon: Icon(Icons.favorite_outlined))
+            ],
           ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: text_form_field('Search', searchController),
-                  ),
-                  SizedBox(width: 10.w),
-                  ElevatedButton(
-                    onPressed: () {
-                      searchMealBloc?.add(
-                        FetchSearchMealEvent(
-                            data: {'s': searchController.text}),
-                      );
-                    },
-                    child: const Icon(Icons.search),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-              if (searchMealModel != null)
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: searchMealModel!.meals!.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          sendRoute(
-                            context,
-                            RoutesNames.recipedetail,
-                            data: {
-                              "data": jsonEncode(
-                                searchMealModel!.meals![index],
-                              ),
-                            },
-                          );
+          body: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: text_form_field(
+                        'Search',
+                        searchController,
+                        onChanged: (p0) {
+                          searchMealBloc?.add(FetchSearchMealEvent(
+                              data: {'s': searchController.text}));
                         },
-                        child: Card(
-                          child: Row(
-                            children: [
-                              Image.network(
-                                searchMealModel!.meals![index].strMealThumb!,
-                                height: 30.h,
-                              ),
-                              SizedBox(width: 10.w),
-                              Expanded(
-                                child: Text(
-                                  searchMealModel!.meals![index].strMeal!,
+                      ),
+                    ),
+                    SizedBox(width: 10.w),
+                    ElevatedButton(
+                      onPressed: () {
+                        searchMealBloc?.add(
+                          FetchSearchMealEvent(
+                              data: {'s': searchController.text}),
+                        );
+                      },
+                      child: const Icon(Icons.search),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20.h),
+                if (searchMealModel != null)
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: searchMealModel!.meals!.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            sendRoute(
+                              context,
+                              RoutesNames.recipedetail,
+                              data: {
+                                "data": jsonEncode(
+                                  searchMealModel!.meals![index],
+                                ),
+                              },
+                            );
+                          },
+                          child: Card(
+                            child: Row(
+                              children: [
+                                Image.network(
+                                  searchMealModel!.meals![index].strMealThumb!,
+                                  height: 30.h,
+                                ),
+                                SizedBox(width: 10.w),
+                                Expanded(
+                                  child: Text(
+                                    searchMealModel!.meals![index].strMeal!,
+                                    style: TextStyle(fontSize: 20.sp),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                else if (recipeModel != null)
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: recipeModel!.categories!.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            sendRoute(
+                              context,
+                              RoutesNames.recipedetail,
+                              data: {
+                                "data": jsonEncode(
+                                  recipeModel!.categories![index],
+                                ),
+                              },
+                            );
+                          },
+                          child: Card(
+                            child: Row(
+                              children: [
+                                Image.network(
+                                  recipeModel!
+                                      .categories![index].strCategoryThumb!,
+                                  height: 30.h,
+                                ),
+                                SizedBox(width: 10.w),
+                                Text(
+                                  recipeModel!.categories![index].strCategory!,
                                   style: TextStyle(fontSize: 20.sp),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                )
-              else if (recipeModel != null)
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: recipeModel!.categories!.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          sendRoute(
-                            context,
-                            RoutesNames.recipedetail,
-                            data: {
-                              "data": jsonEncode(
-                                recipeModel!.categories![index],
-                              ),
-                            },
-                          );
-                        },
-                        child: Card(
-                          child: Row(
-                            children: [
-                              Image.network(
-                                recipeModel!
-                                    .categories![index].strCategoryThumb!,
-                                height: 30.h,
-                              ),
-                              SizedBox(width: 10.w),
-                              Text(
-                                recipeModel!.categories![index].strCategory!,
-                                style: TextStyle(fontSize: 20.sp),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                )
-              else
-                const Center(child: CircularProgressIndicator()),
-            ],
+                        );
+                      },
+                    ),
+                  )
+                else
+                  const Center(child: CircularProgressIndicator()),
+              ],
+            ),
           ),
         ),
       ),

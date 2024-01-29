@@ -20,7 +20,7 @@ dynamic? sendRoute(BuildContext context, RoutesNames s,
   dynamic widget = null;
   switch (s) {
     case RoutesNames.splash:
-      widget = const SplashScreen();
+      widget = SplashScreen();
       break;
     //
     // case RoutesNames.homescreen:
@@ -53,7 +53,8 @@ dynamic? sendRoute(BuildContext context, RoutesNames s,
               ),
             ],
             child: const RecipeHomeScreen(),
-          ));
+          ),
+          clearstack: clearstack);
       break;
 
     case RoutesNames.searchMealdetail:

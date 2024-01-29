@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // Add a delay to simulate the splash screen
     Future.delayed(const Duration(seconds: 3), () {
       // Navigate to the home screen
-      sendRoute(context, RoutesNames.recipescreen, clearstack: true);
+      sendRoute(context, RoutesNames.recipescreen  ,clearstack: true);
     });
   }
 
@@ -27,10 +27,14 @@ class _SplashScreenState extends State<SplashScreen> {
         backgroundColor: Colors.white,
         body: GestureDetector(
           onDoubleTap: () {
-            sendRoute(context, RoutesNames.recipescreen, clearstack: true);
+            sendRoute(context, RoutesNames.recipescreen);
           },
-          child: Center(
-            child: Image.asset('assets/img.png'),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset('assets/img.png')
+            ],
           ),
         ));
   }
