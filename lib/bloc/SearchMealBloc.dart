@@ -16,7 +16,7 @@ class SearchMealBloc extends Bloc<SearchMealEvent, SearchMealState> {
       emit(SearchMealInitialState());
       try {
         SearchMealModel searchMealModel =
-            await repository.sendOtpDealer(event.data);
+            await repository.categoriesData(event.data);
         if (searchMealModel.meals != null) {
           if (searchMealModel.meals!.isNotEmpty) {
             emit(SearchMealLoadedState(searchMealModel: searchMealModel));
@@ -81,12 +81,12 @@ class SearchMealInitialState extends SearchMealState {
 }
 
 abstract class SearchMealRepository {
-  Future<SearchMealModel> sendOtpDealer(Map<String, dynamic>? data);
+  Future<SearchMealModel> categoriesData(Map<String, dynamic>? data);
 }
 
 class SearchMealRepositoryImpl extends SearchMealRepository {
   @override
-  Future<SearchMealModel> sendOtpDealer(Map<String, dynamic>? data) async {
+  Future<SearchMealModel> categoriesData(Map<String, dynamic>? data) async {
     final Response response =
         await ApiService().get(AppConstants.meals, queryParameters: data);
     if (response.statusCode == 200) {

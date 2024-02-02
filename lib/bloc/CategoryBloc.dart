@@ -16,7 +16,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<FetchCategoryEvent>((event, emit) async {
       emit(CategoryInitialState());
       try {
-        CategoryModel categoryModel = await repository.sendOtpDealer(event.data);
+        CategoryModel categoryModel = await repository.categoriesData(event.data);
 
         if (categoryModel.categories != null) {
           if (categoryModel.categories!.isNotEmpty) {
@@ -79,12 +79,12 @@ class CategoryInitialState extends CategoryState {
 }
 
 abstract class CategoryRepository {
-  Future<CategoryModel> sendOtpDealer(Map<String, dynamic>? data);
+  Future<CategoryModel> categoriesData(Map<String, dynamic>? data);
 }
 
 class CategoryRepositoryImpl extends CategoryRepository {
   @override
-  Future<CategoryModel> sendOtpDealer(Map<String, dynamic>? data) async {
+  Future<CategoryModel> categoriesData(Map<String, dynamic>? data) async {
     final Response response =
         await ApiService().post(AppConstants.categories, data: data);
     if (response.statusCode == 200) {

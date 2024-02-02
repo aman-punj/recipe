@@ -38,23 +38,26 @@ dynamic? sendRoute(BuildContext context, RoutesNames s,
       break;
 
     case RoutesNames.recipescreen:
-      sendActivity(
-          context,
-          MultiBlocProvider(
-            providers: [
-              BlocProvider<CategoryBloc>(
-                create: (context) => CategoryBloc(
-                  repository: CategoryRepositoryImpl(),
-                ),
-              ),
-              BlocProvider<SearchMealBloc>(
-                create: (context) =>
-                    SearchMealBloc(repository: SearchMealRepositoryImpl()),
-              ),
-            ],
-            child: const RecipeHomeScreen(),
-          ),
-          clearstack: clearstack);
+      sendActivity(context, RecipeHomeScreen(), clearstack:  clearstack);
+
+    // case RoutesNames.recipescreen:
+    //   sendActivity(
+    //       context,
+    //       MultiBlocProvider(
+    //         providers: [
+    //           BlocProvider<CategoryBloc>(
+    //             create: (context) => CategoryBloc(
+    //               repository: CategoryRepositoryImpl(),
+    //             ),
+    //           ),
+    //           BlocProvider<SearchMealBloc>(
+    //             create: (context) =>
+    //                 SearchMealBloc(repository: SearchMealRepositoryImpl()),
+    //           ),
+    //         ],
+    //         child: const RecipeHomeScreen(),
+    //       ),
+    //       clearstack: clearstack);
       break;
 
     case RoutesNames.searchMealdetail:

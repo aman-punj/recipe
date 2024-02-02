@@ -1,15 +1,14 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recipe/routes/route.dart';
-import 'package:recipe/screens/SplashScreen.dart';
-
-import 'demo/homepage_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(
+    const ProviderScope(child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,19 +20,20 @@ class MyApp extends StatelessWidget {
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (_ , child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'First Method',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            // textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
+      builder: (_, child) {
+        return ProviderScope(
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'First Method',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              // textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
+            ),
+            home: child,
           ),
-          home: child,
         );
       },
       child: sendRoute(context, RoutesNames.splash),
     );
   }
 }
-
