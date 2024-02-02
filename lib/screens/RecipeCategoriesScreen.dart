@@ -2,15 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recipe/routes/route.dart';
 import 'package:recipe/utils/common_widget.dart';
 
 import '../Provider/provider_declaration.dart';
-import '../bloc/CategoryBloc.dart';
-import '../bloc/SearchMealBloc.dart';
 import '../data/model/SearchNameModel.dart';
 import '../data/model/recipeModel.dart';
 
@@ -43,46 +40,15 @@ class _RecipeHomeScreenState extends ConsumerState<RecipeHomeScreen> {
   }
 
   initView() async{
-
+// Call the provider to trigger the data fetching
     await ref.read(mainScreenApiData).categoriesData({});
-    await ref.read(mainScreenApiData).searchMealData({});
 
+    // Use the watch function to access the data from the provider
+    // categoryModel = ref.watch(mainScreenApiData).modal;
+
+    // Set the state to trigger a rebuild
+    setState(() {});
   }
-
-  // void _showBackDialog() {
-  //   showDialog<void>(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text('Are you sure?'),
-  //         content: const Text(
-  //           'Are you sure you want to leave this App?',
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             style: TextButton.styleFrom(
-  //               textStyle: Theme.of(context).textTheme.labelLarge,
-  //             ),
-  //             child: const Text('Nevermind'),
-  //             onPressed: () {
-  //               Navigator.pop(context);
-  //             },
-  //           ),
-  //           TextButton(
-  //             style: TextButton.styleFrom(
-  //               textStyle: Theme.of(context).textTheme.labelLarge,
-  //             ),
-  //             child: const Text('Leave'),
-  //             onPressed: () {
-  //               Navigator.pop(context);
-  //               Navigator.pop(context);
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +106,14 @@ class _RecipeHomeScreenState extends ConsumerState<RecipeHomeScreen> {
                     child: text_form_field(
                       'Search',
                       searchController,
-                      onChanged: (p0) {
+                      onChanged: (p0) async {
+                        await ref.read(mainScreenApiData).searchMealData({'s': searchController.text});
+                        // Use the watch function to access the data from the provider
+                        searchMealModel = ref.watch(mainScreenApiData).searchMealModel;
+                        // Set the state to trigger a rebuild
+                        setState(() {});
+                        // await ref.read(mainScreenApiData).searchMealData({'s': searchController.text});
+                        // searchMealModel
                         // searchMealBloc?.add(FetchSearchMealEvent(
                         //     data: {'s': searchController.text}));
                       },
@@ -148,7 +121,12 @@ class _RecipeHomeScreenState extends ConsumerState<RecipeHomeScreen> {
                   ),
                   SizedBox(width: 10.w),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      await ref.read(mainScreenApiData).searchMealData({'s': searchController.text});
+
+                      // categoryModel!.categories![index].strCategory!,
+
+                      // searchMealModel!.meals![index].
                       // searchMealBloc?.add(
                       //   FetchSearchMealEvent(
                       //       data: {'s': searchController.text}),

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,22 +24,22 @@ class CounterNotifier extends ChangeNotifier {
       throw Exception();
     }
   }
-
+  // https://theninehertz.com/
   // for searching meal
   SearchMealModel? searchMealModel;
 
   Future<SearchMealModel> searchMealData(Map<String, dynamic>? data) async {
     final Response response =
-    await ApiService().post(AppConstants.categories, data: data);
+    await ApiService().get(AppConstants.meals, queryParameters: data);
     if (response.statusCode == 200) {
       var data = json.decode('$response');
-      searchMealModel = SearchMealModel.fromJson(data);
-      notifyListeners();
-      return searchMealModel!;
+      SearchMealModel model = SearchMealModel.fromJson(data);
+      return model;
     } else {
       throw Exception();
     }
   }
+
 }
 
 final mainScreenApiData = ChangeNotifierProvider<CounterNotifier>((ref) {
