@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         return ProviderScope(
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'First Method',
+            title: 'Recipe',
             theme: ThemeData(
               primarySwatch: Colors.blue,
               // textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
